@@ -2,8 +2,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import sessionmaker, relationship
-from sqlalchemy import func
-from sqlalchemy import desc
 
 
 engine = create_engine('postgresql:///catalog', echo=True)
@@ -14,7 +12,7 @@ class Category(Base):
     # Define table schema
     __tablename__ = 'categories'
     id = Column(Integer, primary_key=True)
-    name = Column(String(50))
+    name = Column(String(50), nullable=False)
     # Define relationship to Item class
     items = relationship('Item', back_populates='category')
 
@@ -34,8 +32,8 @@ class Item(Base):
     # Define table schema
     __tablename__ = 'items'
     id = Column(Integer, primary_key=True)
-    title = Column(String(50))
-    description = Column(String(256))
+    title = Column(String(50), nullable=False)
+    description = Column(String(250), nullable=False)
     cat_id = Column(Integer, ForeignKey('categories.id'))
     # Define relationship to Category class
     category = relationship('Category', back_populates='items')
