@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from flask import Flask, json, jsonify
+from flask import Flask, json, jsonify, send_file, send_from_directory
 from models import session, Category, Item
 
 
@@ -7,8 +7,13 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def hello():
-    return 'Hello, World!'
+def index():
+  return send_file('index.html')
+
+
+@app.route('/static/<path:path>')
+def resources(path):
+    return send_from_directory('static', path)
 
 
 @app.route('/api')
