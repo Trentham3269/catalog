@@ -1,16 +1,16 @@
-var app1 = new Vue({
+const vm = new Vue({
   el: '#app-1',
   data: {
     results: []
   },
   mounted() {
-    axios.get('/api/categories').then(response => {
+    axios.get('/api/catalog').then(response => {
       this.results = response.data
     })
   }
 });
 
-var app2 = new Vue({
+/*var app2 = new Vue({
   el: '#app-2',
   data: {
     results: []
@@ -20,4 +20,4 @@ var app2 = new Vue({
       this.results = response.data
     })
   }
-});
+});*/

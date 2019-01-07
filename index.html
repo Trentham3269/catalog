@@ -8,25 +8,27 @@
 </head>
 <body>
   <div id="app-1">
-    <h3>Categories:</h3>
-    <ul>
-      <li v-for="result in results">
-        {{ result.name }}
+    <div>
+      <h3>Categories</h3>
+      <ul>
+        <li v-for="result in results">
+          {{ result.name }}
+        </li>
+      </ul>
+    </div>
+    <br>
+    <div>
+    <h3>Latest Items</h3>
+    <ul v-for="result in results">
+      <!-- Iterate over nested json -->
+      <li v-for="item in result.items">
+        {{ item.title + ' (' + result.name + ')' }}
       </li>
     </ul>
   </div>
-  <br>
-  <div id="app-2">
-    <h3>Items:</h3>
-    <ul>
-      <li v-for="result in results">
-        {{ result.title }}
-      </li>
-    </ul>
   </div>
   <script src="static/js/vue.js"></script>
   <script src="static/js/axios.min.js"></script>
-  <!-- <script src="static/js/vuetify.js"></script> -->
   <script src="static/js/app.js"></script>
 </body>
 </html>

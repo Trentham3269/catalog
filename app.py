@@ -16,15 +16,9 @@ def resources(path):
     return send_from_directory('static', path)
 
 
-@app.route('/api/categories')
-def categories():
+@app.route('/api/catalog')
+def catalog():
     data = session.query(Category).all()
-    return jsonify([d.serialize() for d in data])
-
-
-@app.route('/api/items')
-def items():
-    data = session.query(Item).all()
     return jsonify([d.serialize() for d in data])
 
 
