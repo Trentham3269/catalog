@@ -1,12 +1,22 @@
-const url = 'https://data.police.uk/api/leicestershire/neighbourhoods'
-
-const vm = new Vue({
-  el: '#app',
+var app1 = new Vue({
+  el: '#app-1',
   data: {
     results: []
   },
   mounted() {
-    axios.get(url).then(response => {
+    axios.get('/api/categories').then(response => {
+      this.results = response.data
+    })
+  }
+});
+
+var app2 = new Vue({
+  el: '#app-2',
+  data: {
+    results: []
+  },
+  mounted() {
+    axios.get('/api/items').then(response => {
       this.results = response.data
     })
   }
