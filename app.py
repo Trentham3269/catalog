@@ -17,15 +17,15 @@ def resources(path):
 
 
 @app.route('/catalog/api')
-def catalog():
+def catalogAPI():
     data = session.query(Category).all()
     return jsonify([d.serialize() for d in data])
 
 
 @app.route('/catalog/api/<int:id>/items')
-def category(id):
-    data = session.query(Category).filter_by(id=id).all()
-    return jsonify([d.serialize() for d in data])
+def itemsAPI(id):
+	data = session.query(Category).filter_by(id=id).all()
+	return jsonify([d.serialize() for d in data])
 
 
 if __name__ == '__main__':
