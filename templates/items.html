@@ -1,0 +1,28 @@
+<html>
+<head>
+</head>
+<body>
+  <h1>{{ title }}</h1>
+  <div>
+    <h3>Categories</h3>
+    {% for category in categories %}
+    <ul>
+      <li>{{ category.name }}</li>
+    </ul>
+    {% endfor %}
+  </div>
+  <div>
+    {% if count == 1 %}
+    <h3>{{ name }} Items - {{ count }} item</h3>
+    {% else %}
+    <h3>{{ name }} Items - {{ count }} items</h3>
+    {% endif %}
+    {% for item in items %}
+      {% for i in item.items %}
+      <ul>
+        <li>{{ i.title }}</li>
+      </ul>
+      {% endfor %}
+    {% endfor %}
+</body>
+</html> 

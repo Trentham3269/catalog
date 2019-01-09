@@ -1,31 +1,45 @@
 #!/usr/bin/python3
-from flask import Flask, json, jsonify, send_file, send_from_directory
+from flask import Flask, jsonify, render_template
 from models import session, Category, Item
+from sqlalchemy import desc
 
 
 app = Flask(__name__)
 
 
+# Define app title for templates
+title = 'Catalog App'
+
+
+# Return all categories and most recent 10 items added
 @app.route('/')
 def index():
-    return send_file('index.html')
+    categories = session.query(Category).all()
+    items = session.query(Item.title, Category.name).\
+        join(Category).\
+        order_by(Item.id.desc()).\
+        limit(10).\
+        all()
+    return render_template('index.html',
+                           title=title,
+                           categories=categories,
+                           items=items)
 
 
-@app.route('/static/<path:path>')
-def resources(path):
-    return send_from_directory('static', path)
+# Return items for specific category
+@app.route('/catalog/<name>/items')
+def items(name):
+    categories = session.query(Category).all()
+    items = session.query(Category).filter_by(name=name).all()
+    count = session.query(Item.title, Category.name).join(Category).filter_by(name=name).count()
+    return render_template('items.html', title=title, categories=categories, items=items, name=name, count=count)
 
 
+# JSON api endpoint
 @app.route('/catalog/api')
 def catalogAPI():
     data = session.query(Category).all()
     return jsonify([d.serialize() for d in data])
-
-
-@app.route('/catalog/api/<int:id>/items')
-def itemsAPI(id):
-	data = session.query(Category).filter_by(id=id).all()
-	return jsonify([d.serialize() for d in data])
 
 
 if __name__ == '__main__':

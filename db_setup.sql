@@ -38,6 +38,3 @@ INSERT INTO items (id, title, description, cat_id) VALUES (15, 'Shoulder pads', 
 INSERT INTO items (id, title, description, cat_id) VALUES (16, 'Surfboard', 'Almost obligatory', 8);
 INSERT INTO items (id, title, description, cat_id) VALUES (17, 'Stick', 'Field or ice?', 9);
 INSERT INTO items (id, title, description, cat_id) VALUES (18, 'Ice Skates', 'Well that explains the stick type', 9);
-
-
-
