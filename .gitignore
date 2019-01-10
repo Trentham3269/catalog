@@ -102,3 +102,12 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# misc
+.DS_Store
+bin/
+lib64
+pip-selfcheck.json
+pyvenv.cfg
+share/
+

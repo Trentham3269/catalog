@@ -31,8 +31,31 @@ def index():
 def items(name):
     categories = session.query(Category).all()
     items = session.query(Category).filter_by(name=name).all()
-    count = session.query(Item.title, Category.name).join(Category).filter_by(name=name).count()
-    return render_template('items.html', title=title, categories=categories, items=items, name=name, count=count)
+    count = session.query(Item.title, Category.name).\
+        join(Category).\
+        filter_by(name=name).\
+        count()
+    return render_template('items.html',
+                           title=title,
+                           name=name,
+                           categories=categories,
+                           items=items,
+                           count=count)
+
+
+# Return description of individual item
+@app.route('/catalog/<name>/<description>')
+def item(name, description):
+    item = session.query(Category.name, Item.title, Item.description).\
+        join(Item).\
+        filter_by(title=description).\
+        one()
+    print('This is the printed item {}'.format(item))
+    return render_template('item.html',
+                           title=title,
+                           name=name,
+                           description=description,  
+                           item=item)
 
 
 # JSON api endpoint
