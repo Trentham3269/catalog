@@ -7,12 +7,12 @@
     <h3>Categories</h3>
     {% for category in categories %}
     <ul>
-      <li>{{ category.name }}</li>
+      <li><a href="{{ url_for('items', name=category.name) }}">{{ category.name }}</a></li>
     </ul>
     {% endfor %}
   </div>
   <div>
-    <!-- TODO: Add category to each item -->
+    <!-- TODO: Add category to each item (refactor back-end?) -->
     <h3>Latest Items</h3>
     {% for item in items %}
     <ul>
@@ -20,4 +20,4 @@
     </ul>
     {% endfor %}
 </body>
-</html> 
+</html>

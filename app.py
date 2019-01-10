@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, url_for
 from models import session, Category, Item
 from sqlalchemy import desc
 
@@ -50,7 +50,6 @@ def item(name, description):
         join(Item).\
         filter_by(title=description).\
         one()
-    print('This is the printed item {}'.format(item))
     return render_template('item.html',
                            title=title,
                            name=name,
