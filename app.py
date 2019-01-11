@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-from flask import Flask, jsonify, render_template, url_for, request, redirect
+from flask import Flask, jsonify, render_template, url_for, \
+    request, redirect, flash
 from models import session, Category, Item
 from sqlalchemy import desc
 
@@ -60,7 +61,8 @@ def item(name, description):
 
 
 # Create new item
-@app.route('/catalog/<name>/new', methods=['GET', 'POST'])
+@app.route('/catalog/<name>/new',
+           methods=['GET', 'POST'])
 def new(name):
     # Determine current sequence number for id column
     sql = "SELECT pg_catalog.setval(pg_get_serial_sequence('items', 'id'), \
@@ -76,12 +78,35 @@ def new(name):
                         cat_id=request.form['cat_id'])
         session.add(new_item)
         session.commit()
-        return redirect(url_for('index'))
+        flash('New item created')
+        # TODO: consider redirecting to items not index
+        return redirect(url_for('items',
+                                name=name))
     # For a get request, render the form
     else:
-        return render_template('new.html', 
-                               title=title, 
+        return render_template('new.html',
+                               title=title,
                                name=name)
+
+
+# Delete existing item
+@app.route('/catalog/<name>/<description>/delete',
+           methods=['GET', 'POST'])
+def delete(name, description):
+    delete_item = session.query(Item).filter_by(title=description).one()
+    # For a post request, delete item and redirect to items page
+    if request.method == 'POST':
+        session.delete(delete_item)
+        session.commit()
+        flash('Item deleted')
+        return redirect(url_for('items',
+                                name=name))
+    # For a get request, render the page
+    else:
+        return render_template('delete.html',
+                               name=name,
+                               description=description,
+                               item=delete_item)
 
 
 # JSON api endpoint
@@ -92,5 +117,6 @@ def catalogAPI():
 
 
 if __name__ == '__main__':
+    app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=8000)

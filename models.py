@@ -39,7 +39,7 @@ class Item(Base):
     category = relationship('Category', back_populates='items')
 
     def __repr__(self):
-        return 'id: {}, title: {}, descr: {}, cat_id: {}'.format(
+        return 'id: {}, title: {}, description: {}, cat_id: {}'.format(
             self.id, self.title, self.description, self.cat_id)
 
     def serialize(self):
