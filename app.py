@@ -86,14 +86,42 @@ def new(name):
     else:
         return render_template('new.html',
                                title=title,
-                               name=name)
+                               name=name,
+                               item=new_item)
+
+
+# Edit existing item
+@app.route('/catalog/<name>/<description>/edit',
+           methods=['GET', 'POST'])
+def edit(name, description):
+    edit_item = session.query(Item).\
+        filter_by(title=description).\
+        one()
+    # For a post request, edit item and redirect to items page
+    if request.method == 'POST':
+        if request.form['title']:
+            edit_item.title = request.form['title']
+        session.add(edit_item)
+        session.commit()
+        flash('Item updated')
+        return redirect(url_for('items',
+                                name=name))
+    # For a get request, render the form
+    else:
+        return render_template('edit.html',
+                               title=title,
+                               name=name,
+                               description=description,
+                               item=edit_item)
 
 
 # Delete existing item
 @app.route('/catalog/<name>/<description>/delete',
            methods=['GET', 'POST'])
 def delete(name, description):
-    delete_item = session.query(Item).filter_by(title=description).one()
+    delete_item = session.query(Item).\
+        filter_by(title=description).\
+        one()
     # For a post request, delete item and redirect to items page
     if request.method == 'POST':
         session.delete(delete_item)
@@ -104,6 +132,7 @@ def delete(name, description):
     # For a get request, render the page
     else:
         return render_template('delete.html',
+                               title=title,
                                name=name,
                                description=description,
                                item=delete_item)

@@ -1,0 +1,15 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <h1>{{ title }}</h1>
+    <h3>Edit {{ item.title }}</h3>
+    <form action="{{ url_for('edit', name=name, description=description) }}" method='POST'>
+      <!-- TODO: explore updating description -->
+      <p>Title:</p>
+      <input type='text' size='30' name='title' placeholder="{{ item.title }}">
+      <input type='submit' value='Edit'>
+    </form>
+    <a href = "{{ url_for('items', name=name) }}">Cancel</a>
+  </body>
+</html>
