@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from flask import Flask, jsonify, render_template, url_for
+from flask import Flask, jsonify, render_template, url_for, request, redirect
 from models import session, Category, Item
 from sqlalchemy import desc
 
@@ -57,6 +57,31 @@ def item(name, description):
                            name=name,
                            description=description,
                            item=item)
+
+
+# Create new item
+@app.route('/catalog/<name>/new', methods=['GET', 'POST'])
+def new(name):
+    # Determine current sequence number for id column
+    sql = "SELECT pg_catalog.setval(pg_get_serial_sequence('items', 'id'), \
+        MAX(id)) FROM items"
+    result = session.execute(sql)
+    for row in result:
+        id = row[0] + 1
+    # For a post request, create new item in database and redirect to home page
+    if request.method == 'POST':
+        new_item = Item(id=id,
+                        title=request.form['name'],
+                        description=request.form['description'],
+                        cat_id=request.form['cat_id'])
+        session.add(new_item)
+        session.commit()
+        return redirect(url_for('index'))
+    # For a get request, render the form
+    else:
+        return render_template('new.html', 
+                               title=title, 
+                               name=name)
 
 
 # JSON api endpoint

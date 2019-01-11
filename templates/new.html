@@ -1,0 +1,20 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <h1>{{ title }}</h1>
+    <h3>Add Item</h3>
+    <form action="{{ url_for('new', name=name) }}" method='POST'>
+      <p>Name:</p>
+      <input type='text' size='30' name='name'>
+      <p>Description:</p>
+      <input type='text' size='30' name='description'>
+      <!-- Return list of options and post as int to db -->
+      <p>Category id:</p>
+      <input type='text' size='30' name='cat_id'>
+      </br>
+      </br>
+      <input type='submit' value='Create'>
+    </form>
+  </body>
+</html>

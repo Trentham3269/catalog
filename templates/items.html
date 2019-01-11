@@ -17,6 +17,8 @@
     {% else %}
     <h3>{{ name }} Items - {{ count }} items</h3>
     {% endif %}
+    <a href="{{ url_for('new', name=name) }}">Add item</a>
+    <br>
     {% for item in items %}
       {% for i in item.items %}
       <ul>
