@@ -30,7 +30,9 @@ def index():
 @app.route('/catalog/<name>/items')
 def items(name):
     categories = session.query(Category).all()
-    items = session.query(Category).filter_by(name=name).all()
+    items = session.query(Category).\
+        filter_by(name=name).\
+        all()
     count = session.query(Item.title, Category.name).\
         join(Category).\
         filter_by(name=name).\
@@ -53,7 +55,7 @@ def item(name, description):
     return render_template('item.html',
                            title=title,
                            name=name,
-                           description=description,  
+                           description=description,
                            item=item)
 
 
