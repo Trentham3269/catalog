@@ -1,15 +1,23 @@
 #!/usr/bin/python3
 from flask import Flask, jsonify, render_template, url_for, \
-    request, redirect, flash
+    request, redirect, flash, make_response, session as login_session
 from models import session, Category, Item
 from sqlalchemy import desc
+import random
+import string
+import json
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
+import httplib2
+import requests
 
 
 app = Flask(__name__)
 
 
-# Define app title for templates
-title = 'Catalog App'
+client_id = json.loads(
+    open('client_secret.json', 'r').read())['web']['client_id']
+application_name = 'Catalog App'
 
 
 # Return all categories and most recent 10 items added
@@ -22,9 +30,130 @@ def index():
         limit(10).\
         all()
     return render_template('index.html',
-                           title=title,
+                           title=application_name,
                            categories=categories,
                            items=items)
+
+
+@app.route('/login')
+def login():
+    state = ''.join(random.choice(string.ascii_uppercase + string.
+                    digits) for x in range(32))
+    login_session['state'] = state
+    return render_template('login.html', STATE=state)
+
+
+@app.route('/connect',
+           methods=['POST'])
+def connect():
+    # Validate state token
+    if request.args.get('state') != login_session['state']:
+        response = make_response(
+            json.dumps('Invalid state parameter.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    # Obtain authorisation code
+    code = request.data
+
+    try:
+        # Upgrade the authorisation code into a credentials object
+        oauth_flow = flow_from_clientsecrets('client_secret.json', scope='')
+        oauth_flow.redirect_uri = 'postmessage'
+        credentials = oauth_flow.step2_exchange(code)
+    except FlowExchangeError:
+        response = make_response(
+            json.dumps('Failed to upgrade the authorisation code.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    # Check that the access token is valid
+    access_token = credentials.access_token
+    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={}'
+           .format(access_token))
+    h = httplib2.Http()
+    result = json.loads(h.request(url, 'GET')[1].decode())
+    # Abort if there is an error in the access token
+    if result.get('error') is not None:
+        response = make_response(json.dumps(result.get('error')), 500)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    # Verify that the access token is used for the intended user
+    gplus_id = credentials.id_token['sub']
+    if result['user_id'] != gplus_id:
+        response = make_response(
+            json.dumps("Token's user ID doesn't match given user ID."), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    # Verify that the access token is valid for this app
+    if result['issued_to'] != client_id:
+        response = make_response(
+            json.dumps("Token's client ID does not match app's."), 401)
+        print("Token's client ID does not match app's.")
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    stored_access_token = login_session.get('access_token')
+    stored_gplus_id = login_session.get('gplus_id')
+    if stored_access_token is not None and gplus_id == stored_gplus_id:
+        response = make_response(
+            json.dumps('Current user is already connected.'), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    # Store the access token in the session for later use
+    login_session['access_token'] = credentials.access_token
+    login_session['gplus_id'] = gplus_id
+
+    # Get user info
+    userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
+    params = {'access_token': credentials.access_token, 'alt': 'json'}
+    answer = requests.get(userinfo_url, params=params)
+
+    data = answer.json()
+    login_session['name'] = data['name']
+
+    output = ''
+    output += '<h3>Welcome, '
+    output += login_session['name']
+    output += '!</h3>'
+    flash('You are now logged in as {}'.format(login_session['name']))
+    return output
+
+
+@app.route('/logout')
+def disconnect():
+    access_token = login_session.get('access_token')
+    print('access token is...{}'.format(access_token))
+    if access_token is None:
+        print('Access Token is None')
+        response = make_response(json.dumps(
+            'Current user not connected.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    print('In gdisconnect access token is {}'.format(access_token))
+    print('User name is: ')
+    print(login_session['name'])
+    url = 'https://accounts.google.com/o/oauth2/revoke?token={}'.format(
+        login_session['access_token'])
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[0]
+    print('result is ')
+    print(result)
+    if result['status'] == '200':
+        del login_session['access_token']
+        del login_session['gplus_id']
+        del login_session['name']
+        response = make_response(json.dumps(
+            'Successfully disconnected.'), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    else:
+        response = make_response(json.dumps(
+            'Failed to revoke token for given user.', 400))
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
 
 # Return items for specific category
@@ -39,7 +168,7 @@ def items(name):
         filter_by(name=name).\
         count()
     return render_template('items.html',
-                           title=title,
+                           title=application_name,
                            name=name,
                            categories=categories,
                            items=items,
@@ -54,7 +183,7 @@ def item(name, description):
         filter_by(title=description).\
         one()
     return render_template('item.html',
-                           title=title,
+                           title=application_name,
                            name=name,
                            description=description,
                            item=item)
@@ -64,6 +193,9 @@ def item(name, description):
 @app.route('/catalog/<name>/new',
            methods=['GET', 'POST'])
 def new(name):
+    # Require user login
+    if 'name' not in login_session:
+        return redirect('/login')
     # Determine current sequence number for id column
     sql = "SELECT pg_catalog.setval(pg_get_serial_sequence('items', 'id'), \
         MAX(id)) FROM items"
@@ -79,21 +211,22 @@ def new(name):
         session.add(new_item)
         session.commit()
         flash('New item created')
-        # TODO: consider redirecting to items not index
         return redirect(url_for('items',
                                 name=name))
     # For a get request, render the form
     else:
         return render_template('new.html',
-                               title=title,
-                               name=name,
-                               item=new_item)
+                               title=application_name,
+                               name=name)
 
 
 # Edit existing item
 @app.route('/catalog/<name>/<description>/edit',
            methods=['GET', 'POST'])
 def edit(name, description):
+    # Require user login
+    if 'name' not in login_session:
+        return redirect('/login')
     edit_item = session.query(Item).\
         filter_by(title=description).\
         one()
@@ -109,7 +242,7 @@ def edit(name, description):
     # For a get request, render the form
     else:
         return render_template('edit.html',
-                               title=title,
+                               title=application_name,
                                name=name,
                                description=description,
                                item=edit_item)
@@ -119,6 +252,9 @@ def edit(name, description):
 @app.route('/catalog/<name>/<description>/delete',
            methods=['GET', 'POST'])
 def delete(name, description):
+    # Require user login
+    if 'name' not in login_session:
+        return redirect('/login')
     delete_item = session.query(Item).\
         filter_by(title=description).\
         one()
@@ -132,7 +268,7 @@ def delete(name, description):
     # For a get request, render the page
     else:
         return render_template('delete.html',
-                               title=title,
+                               title=application_name,
                                name=name,
                                description=description,
                                item=delete_item)
