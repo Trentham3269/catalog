@@ -214,7 +214,6 @@ def new(name):
                         cat_id=request.form['cat_id'])
         session.add(new_item)
         session.commit()
-        flash('New item created')
         return redirect(url_for('items',
                                 name=name))
     # For a get request, render the form
@@ -241,7 +240,6 @@ def edit(name, description):
             edit_item.title = request.form['title']
         session.add(edit_item)
         session.commit()
-        flash('Item updated')
         return redirect(url_for('items',
                                 name=name))
     # For a get request, render the form
@@ -268,7 +266,6 @@ def delete(name, description):
     if request.method == 'POST':
         session.delete(delete_item)
         session.commit()
-        flash('Item deleted')
         return redirect(url_for('items',
                                 name=name))
     # For a get request, render the page
