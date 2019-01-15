@@ -153,7 +153,8 @@ def disconnect():
         response = make_response(json.dumps(
             'Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        # return response
+        return redirect(url_for('index'))
     else:
         response = make_response(json.dumps(
             'Failed to revoke token for given user.', 400))
