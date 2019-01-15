@@ -1,20 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Catalog App</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="{{ url_for('static', filename='css/mdb.min.css') }}" rel="stylesheet">
 </head>
-<body>  
-  <div id="signinButton">
-    <span class="g-signin"
-          data-scope="profile"
-          data-clientid="750738866039-p8u7uqmqe3b8vqin3beq1337h4hdjk92.apps.googleusercontent.com"
-          data-redirecturi="postmessage"
-          data-accesstype="offline"
-          data-cookiepolicy="single_host_origin"
-          data-callback="signInCallback"
-          data-approvalprompt="force">
-    </span>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark indigo">
+    <a class="navbar-brand" href="/">{{ title }}</a>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"></li>
+        <li class="nav-item"></li>
+        <li class="nav-item"></li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div class="card">
+          <h5 class="card-header indigo lighten-1 white-text text-center py-4">Sign in with Google</h5>
+          <div class="card-body px-lg-5 pt-0">
+            <form class="md-form" action="{{ url_for('delete', name=name, description=description) }}" method='POST' style="color: #757575;">
+              <h6>Sign in to create, edit or delete items</h6>
+              <br>
+              <div id="signinButton">
+                <span class="g-signin"
+                      data-scope="profile"
+                      data-clientid="750738866039-p8u7uqmqe3b8vqin3beq1337h4hdjk92.apps.googleusercontent.com"
+                      data-redirecturi="postmessage"
+                      data-accesstype="offline"
+                      data-cookiepolicy="single_host_origin"
+                      data-callback="signInCallback"
+                      data-approvalprompt="force">
+                </span>
+              </div>
+              <div id="result"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div id="result"></div>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.8.2.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/google-api.js') }}"></script>
   <script>
@@ -32,10 +70,10 @@
         success: function(result) {
           // Handle or verify the server response if necessary.
           if (result) {
-            $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+            $('#result').html(result)
             setTimeout(function() {
               window.location.href = "/";
-            }, 4000);
+            }, 800);
           } else if (authResult['error']) {
             console.log('There was an error: ' + authResult['error']);
           } else {

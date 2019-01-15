@@ -42,7 +42,10 @@ def login():
     state = ''.join(random.choice(string.ascii_uppercase + string.
                     digits) for x in range(32))
     login_session['state'] = state
-    return render_template('login.html', STATE=state)
+    return render_template('login.html', 
+                           title=application_name,
+                           STATE=state,
+                           login=login_session)
 
 
 @app.route('/connect',
@@ -117,9 +120,9 @@ def connect():
     login_session['name'] = data['name']
 
     output = ''
-    output += '<h3>Welcome, '
+    output += '<h5>Welcome, '
     output += login_session['name']
-    output += '!</h3>'
+    output += '</h5>'
     flash('You are now logged in as {}'.format(login_session['name']))
     return output
 

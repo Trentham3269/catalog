@@ -22,7 +22,7 @@
         <li class="nav-item"></li>
       </ul>
       {% if login.name %}
-      <span class="navbar-text white-text navbar-nav"><a href="{{ url_for('disconnect') }}">Hello, {{ login.name }}</a></span>
+      <span class="navbar-text white-text navbar-nav"><a href="{{ url_for('disconnect') }}">{{ login.name }}</a></span>
       {% else %}
       <span class="navbar-text white-text navbar-nav"><a href="{{ url_for('login') }}">Sign in with Google</a></span>
       {% endif %}
