@@ -20,14 +20,15 @@ client_id = json.loads(
 application_name = 'Catalog App'
 
 
-# Return all categories and most recent 10 items added
+# Return all categories and most recent items added
 @app.route('/')
 def index():
     categories = session.query(Category).all()
+    count = session.query(Category).count()
     items = session.query(Item.title, Category.name).\
         join(Category).\
         order_by(Item.id.desc()).\
-        limit(10).\
+        limit(count).\
         all()
     return render_template('index.html',
                            title=application_name,
