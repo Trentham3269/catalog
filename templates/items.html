@@ -1,39 +1,64 @@
 <html>
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Catalog App</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="{{ url_for('static', filename='css/mdb.min.css') }}" rel="stylesheet">
 </head>
 <body>
-  <h1>{{ title }}</h1>
-  <div>
-    <h3>Categories</h3>
-    {% for category in categories %}
-    <ul>
-      <li><a href="{{ url_for('items', name=category.name) }}">{{ category.name }}</a></li>
-    </ul>
-    {% endfor %}
-  </div>
-  <div>
-    {% if count == 1 %}
-    <h3>{{ name }} Items - {{ count }} item</h3>
-    {% else %}
-    <h3>{{ name }} Items - {{ count }} items</h3>
-    {% endif %}
-    <a href="{{ url_for('new', name=name) }}">Add item</a>
+  <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark primary-color-dark">
+      <!-- Navbar brand -->
+      <a class="navbar-brand" href="/">{{ title }}</a>
+    </nav>
     <br>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-      <ul>
-        {% for message in messages %}
-        <li><strong>{{ message }}</strong></li>
+    <div>
+      <div class="row">
+        <div class="col-sm-4">
+          <h5>Categories</h5>
+          <div class="list-group">
+            {% for category in categories %}
+            <a href="{{ url_for('items', name=category.name) }}" class="list-group-item list-group-item-action">{{ category.name }}</a>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="col-sm-8">
+          {% if count == 1 %}
+          <h5>{{ name }} - {{ count }} item <a href="{{ url_for('new', name=name) }}">  Add item</a>  {% else %}</h5>
+          <h5>{{ name }} - {{ count }} items<a href="{{ url_for('new', name=name) }}">  Add item</a>
+          {% endif %}</h5>
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          <ul>
+            {% for message in messages %}
+            <li><strong>{{ message }}</strong></li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          {% endwith %}
+          {% for item in items %}
+          {% for i in item.items %}
+          <div class="list-group">
+            <a href="{{ url_for('item', name=name, description=i.title) }}" class="list-group-item list-group-item-action">{{ i.title }}</a>
+          </div>
         {% endfor %}
-      </ul>
-      {% endif %}
-    {% endwith %}
-    {% for item in items %}
-      {% for i in item.items %}
-      <ul>
-        <li><a href="{{ url_for('item', name=name, description=i.title) }}">{{ i.title }}</a></li>
-      </ul>
-      {% endfor %}
-    {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <!-- JQuery -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/mdb.min.js') }}"></script>
 </body>
 </html>

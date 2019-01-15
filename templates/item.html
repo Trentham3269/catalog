@@ -1,14 +1,44 @@
 <html>
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Catalog App</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="{{ url_for('static', filename='css/mdb.min.css') }}" rel="stylesheet">
 </head>
 <body>
-  <h1>{{ title }}</h1>
-  <div>
-    <h3>{{ item.title  }}</h3>
-    <p>Description: {{ item.description }}
+  <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark primary-color-dark">
+      <!-- Navbar brand -->
+      <a class="navbar-brand" href="/">{{ title }}</a>
+    </nav>
     <br>
-    <br>
-    <a href="{{ url_for('edit', name=name, description=description) }}">Edit</a> | <a href="{{ url_for('delete', name=name, description=description) }}">Delete</a>
+    <div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="card">
+  	        <div class="card-body">
+              <h5 class="card-title">{{ item.title }}</h5>
+              <p class="card-text">{{ item.description }}</p>
+              <a class="card-link" href="{{ url_for('edit', name=name, description=description) }}">Edit</a>
+              <a class="card-link" href="{{ url_for('delete', name=name, description=description) }}">Delete</a>
+  	      </div>
+        </div>
+      </div>
+    </div>
   </div>
+  <!-- JQuery -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/mdb.min.js') }}"></script>
 </body>
 </html> 
