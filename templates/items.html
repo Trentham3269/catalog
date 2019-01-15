@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,41 +13,49 @@
   <link href="{{ url_for('static', filename='css/mdb.min.css') }}" rel="stylesheet">
 </head>
 <body>
+  <nav class="navbar navbar-expand-lg navbar-dark indigo">
+    <a class="navbar-brand" href="/">{{ title }}</a>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"></li>
+        <li class="nav-item"></li>
+        <li class="nav-item"></li>
+      </ul>
+      {% if login.name %}
+      <span class="navbar-text white-text navbar-nav">Hello, {{ login.name }}</span>
+      {% endif %}
+    </div>
+  </nav>
+  <br>
   <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-dark primary-color-dark">
-      <!-- Navbar brand -->
-      <a class="navbar-brand" href="/">{{ title }}</a>
-    </nav>
-    <br>
-    <div>
-      <div class="row">
-        <div class="col-sm-4">
-          <h5>Categories</h5>
-          <div class="list-group">
-            {% for category in categories %}
-            <a href="{{ url_for('items', name=category.name) }}" class="list-group-item list-group-item-action">{{ category.name }}</a>
-            {% endfor %}
-          </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <h5>Categories</h5>
+        <div class="list-group">
+          {% for category in categories %}
+          <a href="{{ url_for('items', name=category.name) }}" class="list-group-item list-group-item-action">{{ category.name }}</a>
+          {% endfor %}
         </div>
-        <div class="col-sm-8">
-          {% if count == 1 %}
-          <h5>{{ name }} - {{ count }} item <a href="{{ url_for('new', name=name) }}">  Add item</a>  {% else %}</h5>
-          <h5>{{ name }} - {{ count }} items<a href="{{ url_for('new', name=name) }}">  Add item</a>
-          {% endif %}</h5>
-          {% with messages = get_flashed_messages() %}
-          {% if messages %}
-          <ul>
-            {% for message in messages %}
-            <li><strong>{{ message }}</strong></li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          {% endwith %}
-          {% for item in items %}
-          {% for i in item.items %}
-          <div class="list-group">
-            <a href="{{ url_for('item', name=name, description=i.title) }}" class="list-group-item list-group-item-action">{{ i.title }}</a>
-          </div>
+      </div>
+      <div class="col-sm-8">
+        {% if count == 1 %}
+        <h5>{{ name }} - {{ count }} item <a href="{{ url_for('new', name=name) }}">  Add item</a>  {% else %}</h5>
+        <h5>{{ name }} - {{ count }} items<a href="{{ url_for('new', name=name) }}">  Add item</a>
+        {% endif %}</h5>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+          {% for message in messages %}
+          <li><strong>{{ message }}</strong></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% for item in items %}
+        {% for i in item.items %}
+        <div class="list-group">
+          <a href="{{ url_for('item', name=name, description=i.title) }}" class="list-group-item list-group-item-action">{{ i.title }}</a>
+        </div>
         {% endfor %}
         {% endfor %}
       </div>

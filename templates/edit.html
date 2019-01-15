@@ -1,28 +1,38 @@
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Catalog App</title>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
-    <!-- Bootstrap core CSS -->
-    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-    <!-- Material Design Bootstrap -->
-    <link href="{{ url_for('static', filename='css/mdb.min.css') }}" rel="stylesheet">
-  </head>
-  <body>
-    <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-dark primary-color-dark">
-      <!-- Navbar brand -->
-      <a class="navbar-brand" href="/">{{ title }}</a>
-    </nav>
-    <br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Catalog App</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="{{ url_for('static', filename='css/mdb.min.css') }}" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark indigo">
+    <a class="navbar-brand" href="/">{{ title }}</a>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"></li>
+        <li class="nav-item"></li>
+        <li class="nav-item"></li>
+      </ul>
+      {% if login.name %}
+      <span class="navbar-text white-text navbar-nav">Hello, {{ login.name }}</span>
+      {% endif %}
+    </div>
+  </nav>
+  <br>
+  <div class="container">
     <div class="row">
       <div class="col-sm-3"></div>
       <div class="col-sm-6">
         <div class="card">
-          <h5 class="card-header primary-color white-text text-center py-4">Edit Item</h5>
+          <h5 class="card-header indigo lighten-1 white-text text-center py-4">Edit Item</h5>
           <div class="card-body px-lg-5 pt-0">
             <form class="md-form" action="{{ url_for('edit', name=name, description=description) }}" method='POST' style="color: #757575;">
               <input type="text" id="name" name='title' class="form-control" placeholder="{{ item.title }}">
@@ -33,13 +43,14 @@
         </div>
       </div>
     </div>
-    <!-- JQuery -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
-    <!-- Bootstrap tooltips -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
-    <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/mdb.min.js') }}"></script>
-  </body>
+  </div>
+  <!-- JQuery -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/mdb.min.js') }}"></script>
+</body>
 </html>

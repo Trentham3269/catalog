@@ -33,7 +33,8 @@ def index():
     return render_template('index.html',
                            title=application_name,
                            categories=categories,
-                           items=items)
+                           items=items,
+                           login=login_session)
 
 
 @app.route('/login')
@@ -173,7 +174,8 @@ def items(name):
                            name=name,
                            categories=categories,
                            items=items,
-                           count=count)
+                           count=count,
+                           login=login_session)
 
 
 # Return description of individual item
@@ -187,7 +189,8 @@ def item(name, description):
                            title=application_name,
                            name=name,
                            description=description,
-                           item=item)
+                           item=item,
+                           login=login_session)
 
 
 # Create new item
@@ -218,7 +221,8 @@ def new(name):
     else:
         return render_template('new.html',
                                title=application_name,
-                               name=name)
+                               name=name,
+                               login=login_session)
 
 
 # Edit existing item
@@ -246,7 +250,8 @@ def edit(name, description):
                                title=application_name,
                                name=name,
                                description=description,
-                               item=edit_item)
+                               item=edit_item,
+                               login=login_session)
 
 
 # Delete existing item
@@ -272,7 +277,8 @@ def delete(name, description):
                                title=application_name,
                                name=name,
                                description=description,
-                               item=delete_item)
+                               item=delete_item,
+                               login=login_session)
 
 
 # JSON api endpoint

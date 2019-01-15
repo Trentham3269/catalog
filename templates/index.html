@@ -13,12 +13,21 @@
   <link href="{{ url_for('static', filename='css/mdb.min.css') }}" rel="stylesheet">
 </head>
 <body>
+  <nav class="navbar navbar-expand-lg navbar-dark indigo">
+    <a class="navbar-brand" href="/">{{ title }}</a>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"></li>
+        <li class="nav-item"></li>
+        <li class="nav-item"></li>
+      </ul>
+      {% if login.name %}
+      <span class="navbar-text white-text navbar-nav">Hello, {{ login.name }}</span>
+      {% endif %}
+    </div>
+  </nav>
+  <br>
   <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-dark primary-color-dark">
-      <!-- Navbar brand -->
-      <a class="navbar-brand" href="/">{{ title }}</a>
-    </nav>
-    <br>
     <div class="row">
       <div class="col-sm-4">
         <h5>Categories</h5>
