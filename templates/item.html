@@ -36,8 +36,10 @@
   	      <div class="card-body">
             <h5 class="card-title">{{ item.title }}</h5>
             <p class="card-text">{{ item.description }}</p>
+            {% if login.name %}
             <a class="card-link" href="{{ url_for('edit', name=name, description=description) }}">Edit</a>
             <a class="card-link" href="{{ url_for('delete', name=name, description=description) }}">Delete</a>
+            {% endif %}
   	      </div>
         </div>
       </div>

@@ -41,9 +41,18 @@
       </div>
       <div class="col-sm-8">
         {% if count == 1 %}
-        <h5>{{ name }} - {{ count }} item <a href="{{ url_for('new', name=name) }}">  Add item</a>  {% else %}</h5>
-        <h5>{{ name }} - {{ count }} items<a href="{{ url_for('new', name=name) }}">  Add item</a>
-        {% endif %}</h5>
+        <h5>{{ name }} - {{ count }} item 
+          {% if login.name %}
+          <a href="{{ url_for('new', name=name) }}">Add item</a>
+          {% endif %}
+        </h5>
+        {% else %}
+        <h5>{{ name }} - {{ count }} items
+          {% if login.name %}
+          <a href="{{ url_for('new', name=name) }}">Add item</a>
+          {% endif %}
+        </h5>
+        {% endif %}
         {% for item in items %}
         {% for i in item.items %}
         <div class="list-group">
