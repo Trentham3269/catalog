@@ -1,4 +1,4 @@
-# Catalog
+# Catalog App
 
 A web application to list items based on their category. Requires sign in with Google authentication/authorisation to edit, create and delete items. 
 
@@ -8,7 +8,7 @@ This code requires the following to run:
 + [Python 3](https://www.python.org/downloads/)
 + [PostgreSQL](https://www.postgresql.org/)
 
-Install these python libraries by running `pip3 install -r requirements.txt`:
+Install these python libraries by running `$ pip3 install -r requirements.txt`:
 + [flask](http://flask.pocoo.org/)
 + [sqlalchemy](https://www.sqlalchemy.org/)
 + [oauth2client](https://github.com/googleapis/oauth2client)
