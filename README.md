@@ -34,7 +34,11 @@ $ ./app.py
 ```
 You can then view the application in a web browser at http://localhost:8000. It should look something like this:
 
-![App Screenshot](./app.png?raw=true)
+![App Screenshot](./img/app.png?raw=true)
+
+The application also provides an endpoint at http://localhost:8000/catalog/api which returns JSON like this:
+
+![API Screenshot](./img/api.png?raw=true)
 
 ## Style Guide
 The [Pep8](https://www.python.org/dev/peps/pep-0008/) style guide is used. You can install [pycodestyle](https://pypi.org/project/pycodestyle/) on Linux with `$ pip3 install pyscodestyle` and then run `$ pycodestyle app.py` to check the code's adherence to the standard. 
