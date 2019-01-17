@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 
 client_id = json.loads(
-    open('client_secret.json', 'r').read())['web']['client_id']
+    open('client_secrets.json', 'r').read())['web']['client_id']
 application_name = 'Catalog App'
 
 
@@ -62,7 +62,7 @@ def connect():
 
     try:
         # Upgrade the authorisation code into a credentials object
-        oauth_flow = flow_from_clientsecrets('client_secret.json', scope='')
+        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:

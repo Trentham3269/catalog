@@ -111,3 +111,5 @@ pip-selfcheck.json
 pyvenv.cfg
 share/
 
+# Google client ID
+client_secrets.json
