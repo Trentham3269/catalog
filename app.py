@@ -6,8 +6,8 @@ from sqlalchemy import desc
 import random
 import string
 import json
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.client import FlowExchangeError
+from oauth2client.client import flow_from_clientsecrets, \
+    FlowExchangeError
 import httplib2
 import requests
 
