@@ -282,11 +282,20 @@ def delete(name, description):
                                login=login_session)
 
 
-# JSON api endpoint
+# JSON api endpoint for all data
 @app.route('/catalog/api')
 def catalogAPI():
     data = session.query(Category).all()
     return jsonify([d.serialize() for d in data])
+
+
+# JSON api endpoint for individual item
+@app.route('/catalog/<name>/<description>/api')
+def itemAPI(name, description):
+    item = session.query(Item).\
+            filter_by(title=description).\
+            one()
+    return jsonify(item.serialize())
 
 
 if __name__ == '__main__':
