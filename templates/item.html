@@ -31,11 +31,18 @@
   <br>
   <div class="container">
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-4">
+        <h5>Category</h5>
+        <div class="list-group">
+          <a href="{{ url_for('items', name=category.name) }}" class="list-group-item list-group-item-action">{{ category.name }}</a>
+        </div>
+      </div>
+      <div class="col-sm-8">
+        <h5>Item</h5>
         <div class="card">
   	      <div class="card-body">
-            <h5 class="card-title">{{ item.title }}</h5>
-            <p class="card-text">{{ item.description }}</p>
+            <h6 class="card-title">{{ item.title }}</h6>
+            <p class="card-text">Description: {{ item.description }}</p>
             {% if login.name %}
             <a class="card-link" href="{{ url_for('edit', name=name, description=description) }}">Edit</a>
             <a class="card-link" href="{{ url_for('delete', name=name, description=description) }}">Delete</a>

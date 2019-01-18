@@ -185,6 +185,9 @@ def items(name):
 # Return description of individual item
 @app.route('/catalog/<name>/<description>')
 def item(name, description):
+    category = session.query(Category.name).\
+        filter_by(name=name).\
+        one()
     item = session.query(Category.name, Item.title, Item.description).\
         join(Item).\
         filter_by(title=description).\
@@ -193,6 +196,7 @@ def item(name, description):
                            title=application_name,
                            name=name,
                            description=description,
+                           category=category,
                            item=item,
                            login=login_session)
 
