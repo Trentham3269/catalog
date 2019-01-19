@@ -41,7 +41,7 @@ class User(Base):
             self.id, self.email)
 
     def serialize(self):
-        return {    
+        return {
             'id': self.id,
             'email': self.email,
             'items': ([i.serialize() for i in self.items]),
@@ -62,8 +62,10 @@ class Item(Base):
     user = relationship('User', back_populates='items')
 
     def __repr__(self):
-        return 'id: {}, title: {}, description: {}, cat_id: {}'.format(
-            self.id, self.title, self.description, self.cat_id)
+        return 'id: {}, title: {}, description: {},\
+                cat_id: {}, user_id: {}'.format(
+                    self.id, self.title, self.description,
+                    self.cat_id, self.user_id)
 
     def serialize(self):
         return {
@@ -71,6 +73,7 @@ class Item(Base):
             'title': self.title,
             'description': self.description,
             'cat_id': self.cat_id,
+            'user_id': self.user_id,
             }
 
 

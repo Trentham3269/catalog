@@ -228,7 +228,7 @@ def item(name, description):
 @app.route('/catalog/<name>/new',
            methods=['GET', 'POST'])
 def new(name):
-    # Require user login
+    # Require user sign in
     if 'name' not in login_session:
         return redirect('/login')
     # Determine current sequence number for id column
@@ -265,17 +265,24 @@ def new(name):
 @app.route('/catalog/<name>/<description>/edit',
            methods=['GET', 'POST'])
 def edit(name, description):
-    # Require user login
+    # Require user sign in
     if 'name' not in login_session:
         return redirect('/login')
-    edit_item = session.query(Item).\
+    edit_item = session.query(Item, User).\
         filter_by(title=description).\
+        join(User).\
         one()
     # For a post request, edit item and redirect to items page
     if request.method == 'POST':
+        # Require user authorisation to edit item
+        if edit_item.User.email != login_session['email']:
+            return render_template('authorisation.html',
+                                   title=application_name,
+                                   login=login_session)
+        # Accept data from form
         if request.form['title']:
-            edit_item.title = request.form['title']
-        session.add(edit_item)
+            edit_item.Item.title = request.form['title']
+        session.add(edit_item.Item)
         session.commit()
         return redirect(url_for('items',
                                 name=name))
@@ -293,15 +300,21 @@ def edit(name, description):
 @app.route('/catalog/<name>/<description>/delete',
            methods=['GET', 'POST'])
 def delete(name, description):
-    # Require user login
+    # Require user sign in
     if 'name' not in login_session:
         return redirect('/login')
-    delete_item = session.query(Item).\
+    delete_item = session.query(Item, User).\
         filter_by(title=description).\
+        join(User).\
         one()
     # For a post request, delete item and redirect to items page
     if request.method == 'POST':
-        session.delete(delete_item)
+        # Require user authorisation to edit item
+        if delete_item.User.email != login_session['email']:
+            return render_template('authorisation.html',
+                                   title=application_name,
+                                   login=login_session)
+        session.delete(delete_item.Item)
         session.commit()
         return redirect(url_for('items',
                                 name=name))

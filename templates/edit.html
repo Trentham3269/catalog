@@ -37,7 +37,7 @@
           <h5 class="card-header indigo lighten-1 white-text text-center py-4">Edit Item</h5>
           <div class="card-body px-lg-5 pt-0">
             <form class="md-form" action="{{ url_for('edit', name=name, description=description) }}" method='POST' style="color: #757575;">
-              <input type="text" id="name" name='title' class="form-control" placeholder="{{ item.title }}">
+              <input type="text" id="name" name='title' class="form-control" placeholder="{{ item.Item.title }}">
               <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit" value='Edit'>Edit</button>
               <a href = "{{ url_for('items', name=name) }}">Cancel</a>
             </form>
