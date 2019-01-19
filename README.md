@@ -49,7 +49,7 @@ You can then view the application in a web browser at http://localhost:8000. It 
 
 ![App Screenshot](./img/app.png?raw=true)
 
-The application also provides an endpoint at http://localhost:8000/catalog/api which returns JSON like this:
+The application also provides two JSON endpoints; one for all items at http://localhost:8000/catalog/api and one which is item specific, for example, http://localhost:8000/catalog/Football/Helmet/api
 
 ![API Screenshot](./img/api.png?raw=true)
 
