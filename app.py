@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from flask import Flask, jsonify, render_template, url_for, \
     request, redirect, flash, make_response, session as login_session
-from models import session, Category, Item
+from models import session, Category, User, Item
 from sqlalchemy import desc
 import random
 import string
@@ -118,7 +118,29 @@ def connect():
 
     data = answer.json()
     login_session['name'] = data['name']
+    login_session['email'] = data['email']
 
+    # Determine current sequence number for id column
+    sql = "SELECT pg_catalog.setval(pg_get_serial_sequence('users', 'id'), \
+        MAX(id)) FROM users"
+    result = session.execute(sql)
+    for row in result:
+        id = row[0] + 1
+
+    # Write signed in user to database
+    email = login_session['email']
+    users = session.query(User.email).all()
+    users_list = []
+    for u in users:
+        users_list.append(u[0])
+    # Only insert record for a new user
+    if users_list.count(email) == 0:
+        new_user = User(id=id,
+                        email=email)
+        session.add(new_user)
+        session.commit()
+
+    # Welcome users for UI
     output = ''
     output += '<h5>Welcome, '
     output += login_session['name']
@@ -150,6 +172,7 @@ def disconnect():
         del login_session['access_token']
         del login_session['gplus_id']
         del login_session['name']
+        del login_session['email']
         response = make_response(json.dumps(
             'Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'

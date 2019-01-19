@@ -28,6 +28,26 @@ class Category(Base):
             }
 
 
+class User(Base):
+    # Define table schema
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    email = Column(String(80), unique=True, nullable=False)
+    # Define relationship to Item class
+    items = relationship('Item', back_populates='user')
+
+    def __repr__(self):
+        return 'id: {}, email: {}'.format(
+            self.id, self.email)
+
+    def serialize(self):
+        return {    
+            'id': self.id,
+            'email': self.email,
+            'items': ([i.serialize() for i in self.items]),
+        }
+
+
 class Item(Base):
     # Define table schema
     __tablename__ = 'items'
@@ -35,8 +55,11 @@ class Item(Base):
     title = Column(String(50), nullable=False)
     description = Column(String(250), nullable=False)
     cat_id = Column(Integer, ForeignKey('categories.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
     # Define relationship to Category class
     category = relationship('Category', back_populates='items')
+    # Define relationship to User class
+    user = relationship('User', back_populates='items')
 
     def __repr__(self):
         return 'id: {}, title: {}, description: {}, cat_id: {}'.format(
