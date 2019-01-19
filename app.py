@@ -237,12 +237,18 @@ def new(name):
     result = session.execute(sql)
     for row in result:
         id = row[0] + 1
+    # Query db to return id of signed in user
+    user_id = session.query(User.id).\
+        filter_by(email=login_session['email']).\
+        one()
+    print('User id of signed in user is...{}'.format(user_id))
     # For a post request, create new item in database and redirect to home page
     if request.method == 'POST':
         new_item = Item(id=id,
                         title=request.form['name'],
                         description=request.form['description'],
-                        cat_id=request.form['cat_id'])
+                        cat_id=request.form['cat_id'],
+                        user_id=user_id)
         session.add(new_item)
         session.commit()
         return redirect(url_for('items',
