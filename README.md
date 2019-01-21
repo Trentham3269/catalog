@@ -33,9 +33,10 @@ You will therefore need to setup and download your own OAuth 2.0 client ID for t
 To setup the database run `$ psql catalog < data/db_setup.sql`
 
 ### Structure
-The database includes two tables:
+The database includes three tables:
 + The categories table includes each sport category `\d categories`
 + The items table includes the items and their descriptions `\d items`
++ The users table includes a unique list of signed in users `\d users`
 
 ## Application
 To run the application:
