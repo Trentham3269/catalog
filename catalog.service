@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve catalog app
+After=network.target
+
+[Service]
+User=catalog
+Group=www-data
+WorkingDirectory=/home/catalog/catalog
+Environment="PATH=/home/catalog/catalog/bin"
+ExecStart=/home/catalog/catalog/bin/uwsgi --ini catalog.ini
+
+[Install]
+WantedBy=multi-user.target
